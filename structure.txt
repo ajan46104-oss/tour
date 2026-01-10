@@ -1,0 +1,13 @@
+D:\tour-platform\
+├── node_modules/
+├── prisma/
+├── public/             <-- ADD IT HERE
+│   ├── profile.pdf     (Your 72MB PDF goes here)
+│   ├── logo.png
+│   └── hero-video.mp4
+├── src/
+│   ├── app/
+│   ├── components/
+│   └── lib/
+├── package.json
+└── tailwind.config.ts

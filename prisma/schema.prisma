@@ -1,0 +1,45 @@
+datasource db {
+  provider = "mysql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tour {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String    @db.Text
+  netCost     Decimal   @db.Decimal(10, 2)
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+}
+
+model Booking {
+  id              Int      @id @default(autoincrement())
+  // This connects the booking to a specific tour
+  tourId          Int?
+  tour            Tour?    @relation(fields: [tourId], references: [id])
+  
+  // Your Adventure Form Fields
+  tourCategory    String   
+  fullName        String
+  email           String?
+  whatsapp        String
+  passportType    String?   
+  departureCity   String
+  travelMode      String   
+  tripType        String?   
+  departureDate   String?
+  returnDate      String?
+  duration        Int
+  adults          Int?
+  children        Int?
+  infants         Int?
+  destinations    String   @db.Text
+  hotelType       String?
+  roomType        String?
+  noOfRooms       String?
+  requirements    String?  @db.Text
+  createdAt       DateTime @default(now())
+}
