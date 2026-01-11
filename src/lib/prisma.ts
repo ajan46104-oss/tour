@@ -1,24 +1,22 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {
-  // On Vercel: Use standard connection (usually via DATABASE_URL env variable)
+  // Online (Vercel) - Uses the DATABASE_URL you just added
   prisma = new PrismaClient();
 } else {
-  // Locally: Use XAMPP MariaDB Adapter
-  const adapter = new PrismaMariaDb({
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'tour_platform_db',
-  });
-  
-  const globalForPrisma = global as unknown as { prisma: PrismaClient };
+  // Local (XAMPP)
   if (!globalForPrisma.prisma) {
-    globalForPrisma.prisma = new PrismaClient({ adapter });
+    globalForPrisma.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: "mysql://root:@127.0.0.1:3306/tour_platform_db"
+        },
+      },
+    });
   }
   prisma = globalForPrisma.prisma;
 }

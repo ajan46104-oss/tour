@@ -1,7 +1,7 @@
 "use client";
 
-<form action={submitAdventureForm}>
 import { useState } from "react";
+import { createBooking } from "../app/actions"; 
 
 export default function BookingForm({ tourId, tourTitle }: { tourId: number, tourTitle: string }) {
   const [isOpen, setIsOpen] = useState(false);
