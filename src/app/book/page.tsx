@@ -1,5 +1,5 @@
 "use client";
-import { submitAdventureForm } from "../actions";
+import { createBooking } from "../actions";
 import { useState } from "react";
 
 export default function AdventureForm() {
@@ -17,7 +17,7 @@ export default function AdventureForm() {
           <p className="opacity-80 mt-2 font-medium">THE BEST TOUR AGENCY — We give you the best of us</p>
         </div>
 
-        <form action={submitAdventureForm} className="p-8 md:p-12 space-y-10">
+        <form action={createBooking} className="p-8 md:p-12 space-y-10">
           
           {/* 1. MAIN CATEGORY HEADINGS */}
           <div className="space-y-4">
