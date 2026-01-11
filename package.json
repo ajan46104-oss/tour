@@ -3,18 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "prisma generate && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate",
+    "build": "npx prisma generate && next build"
   },
   "dependencies": {
+    "@prisma/client": "latest",
+    "dotenv": "^17.2.3",
     "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
     "prisma": "latest",
-    "@prisma/client": "latest"
+    "react": "latest",
+    "react-dom": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",

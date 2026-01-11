@@ -1,6 +1,6 @@
 "use client";
 
-import { createBooking } from "@/app/actions";
+<form action={submitAdventureForm}>
 import { useState } from "react";
 
 export default function BookingForm({ tourId, tourTitle }: { tourId: number, tourTitle: string }) {

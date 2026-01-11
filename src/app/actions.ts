@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function submitAdventureForm(formData: FormData) {
+export async function createBooking(formData: FormData) {
   try {
     const rawData = {
   tourId: formData.get("tourId") ? Number(formData.get("tourId")) : null, // Handle the link
