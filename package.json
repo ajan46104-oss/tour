@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.2.0",
-    "@prisma/client": "latest",
+    "@prisma/client": "^6.19.1",
     "dotenv": "^17.2.3",
     "next": "latest",
-    "prisma": "latest",
+    "prisma": "^6.19.1",
     "react": "latest",
     "react-dom": "latest"
   },
