@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = "mysql://avnadmin:AVNS_TpLTcm7EfuFrYOExhpe@mysql-21fc78fd-ajan46104-9786.c.aivencloud.com:17878/defaultdb?ssl-mode=REQUIRED"
 }
 
 model Tour {
