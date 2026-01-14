@@ -1,45 +1,72 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
 generator client {
   provider = "prisma-client-js"
 }
-
-datasource db {
-  provider = "mysql"
-  url      = "mysql://avnadmin:AVNS_TpLTcm7EfuFrYOExhpe@mysql-21fc78fd-ajan46104-9786.c.aivencloud.com:17878/defaultdb?ssl-mode=REQUIRED"
+model Admin {
+  id       Int    @id @default(1)
+  username String @unique @default("admin")
+  password String // We will store this as a hashed string
 }
-
 model Tour {
   id          Int       @id @default(autoincrement())
   title       String
   description String    @db.Text
   netCost     Decimal   @db.Decimal(10, 2)
-  createdAt   DateTime  @default(now())
   bookings    Booking[]
+  createdAt   DateTime  @default(now())
+}
+
+model PricingSetting {
+  id                Int      @id @default(1)
+  foodPerDay        Float    @default(1500)
+  // These act as "per room" base rates
+  hotelMaster       Float    @default(8000)
+  hotelDouble       Float    @default(5000)
+  hotelTriple       Float    @default(7000)
+  baseFareIslamabad Float    @default(0)
+  updatedAt         DateTime @updatedAt
+  destinations      String?  @db.Text // Store comma-separated list
+}
+
+// NEW Model to handle specific city prices
+model Destination {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  basePrice     Float   // Includes food/base per person
+  roadTransport Float   // Price for 1 Sedan Car to this city
+  airTransport  Float   // Price per person for flight to this city
 }
 
 model Booking {
-  id            Int      @id @default(autoincrement())
-  tourId        Int?
-  tourCategory  String
-  fullName      String
-  email         String?
-  whatsapp      String
-  passportType  String?
-  departureCity String
-  travelMode    String
-  tripType      String?
-  departureDate String?
-  returnDate    String?
-  duration      Int
-  adults        Int?
-  children      Int?
-  infants       Int?
-  destinations  String   @db.Text
-  hotelType     String?
-  roomType      String?
-  noOfRooms     String?
-  requirements  String?  @db.Text
-  createdAt     DateTime @default(now())
-  tour          Tour?    @relation(fields: [tourId], references: [id])
-
-  @@index([tourId], map: "Booking_tourId_fkey")
+  id              Int      @id @default(autoincrement())
+  tourId          Int?
+  tour            Tour?    @relation(fields: [tourId], references: [id])
+  
+  tourCategory    String   
+  fullName        String
+  email           String?
+  whatsapp        String
+  passportType    String?   
+  departureCity   String
+  travelMode      String   
+  tripType        String?   
+  departureDate   String?
+  returnDate      String?
+  duration        Int
+  adults          Int?
+  children        Int?
+  infants         Int?
+  destinations    String   @db.Text
+  hotelType       String?
+  roomType        String?
+  noOfRooms       String?
+  requirements    String?  @db.Text
+  
+  // NEW: Store the calculated total for the admin to see
+  totalEstimate   Float?   
+  createdAt       DateTime @default(now())
 }
