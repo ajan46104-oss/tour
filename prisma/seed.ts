@@ -1,22 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import "dotenv/config";
 
-// 1. Manually define the XAMPP connection details
-const adapter = new PrismaMariaDb({
-  host: '127.0.0.1',   // Use IP to avoid 'localhost' resolution lag
-  port: 3306,
-  user: 'root',        // Forces Prisma to use XAMPP root
-  password: '',        // XAMPP default is blank
-  database: 'tour_platform_db',
-});
-
-// 2. Pass the adapter to the client
-const prisma = new PrismaClient({ adapter });
+// We removed the MariaDB Adapter to prevent Vercel build crashes.
+// Prisma will use the DATABASE_URL from your .env file automatically.
+const prisma = new PrismaClient();
 
 async function main() {
   console.log("Emptying existing data...");
-  // Use deleteMany to avoid primary key conflicts
   await prisma.booking.deleteMany();
   await prisma.tour.deleteMany();
 
@@ -26,17 +15,17 @@ async function main() {
       { 
         title: 'Swat Valley Day Trip', 
         description: 'A beautiful journey to Kalam and Malam Jabba.', 
-        netCost: 4347.83 // This results in Rs. 5000 with 15% markup
+        netCost: 4347.83 
       },
       { 
         title: 'Hunza Luxury Tour', 
         description: '5 Days in Karimabad and Attabad Lake.', 
-        netCost: 43478.26 // This results in Rs. 50,000 with 15% markup
+        netCost: 43478.26 
       },
     ],
   });
   
-  console.log("✅ Success! Your tours are now in XAMPP.");
+  console.log("✅ Seed completed.");
 }
 
 main()
