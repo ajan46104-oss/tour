@@ -1,13 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-import { createBooking } from "../app/admin-actions";
+// FIXED PATH: Using the absolute alias '@/' to point directly to the admin folder
+import { createBooking } from "@/app/admin/admin-actions";
 
 export default function BookingForm({ tourId, tourTitle }: { tourId: number, tourTitle: string }) {
   const [isOpen, setIsOpen] = useState(false);
   
   const [formData, setFormData] = useState({
-    fullName: "",    // Added
-    whatsapp: "",    // Added
+    fullName: "",
+    whatsapp: "",
     adults: 1,
     children: 0,
     duration: 3, 
@@ -33,7 +34,6 @@ export default function BookingForm({ tourId, tourTitle }: { tourId: number, tou
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    // Keep strings as strings, and numbers as numbers
     const val = ["fullName", "whatsapp", "travelMode", "hotelType"].includes(name) ? value : Number(value);
     setFormData(prev => ({ ...prev, [name]: val }));
   };
@@ -49,25 +49,26 @@ export default function BookingForm({ tourId, tourTitle }: { tourId: number, tou
           <div className="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl my-8 border border-slate-100">
             <h2 className="text-2xl font-black text-blue-900 mb-6 uppercase tracking-tight">Trip to {tourTitle}</h2>
             
-            <form action={createBooking} className="space-y-4">
+            {/* WRAPPED ACTION: Ensures the form behaves correctly with server actions */}
+            <form action={async (formDataPayload: FormData) => {
+                await createBooking(formDataPayload);
+                setIsOpen(false);
+            }} className="space-y-4">
               <input type="hidden" name="tourId" value={tourId} />
               <input type="hidden" name="tourCategory" value={tourTitle} />
               <input type="hidden" name="totalEstimate" value={estimate} />
               <input type="hidden" name="travelMode" value={formData.travelMode} />
 
-              {/* Personal Details (CRITICAL FOR ADMIN) */}
               <div className="space-y-3">
                 <input required type="text" name="fullName" placeholder="Your Full Name" onChange={handleChange} className="w-full border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none border" />
                 <input required type="text" name="whatsapp" placeholder="WhatsApp Number (e.g. 0300...)" onChange={handleChange} className="w-full border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none border" />
               </div>
 
-              {/* Travel Mode Toggle */}
               <div className="flex gap-2 bg-slate-100 p-1 rounded-xl">
                 <button type="button" onClick={() => setFormData({...formData, travelMode: "Road"})} className={`flex-1 py-2 rounded-lg font-bold text-xs uppercase ${formData.travelMode === "Road" ? "bg-white text-blue-900 shadow-sm" : "text-slate-500"}`}>🚐 Road</button>
                 <button type="button" onClick={() => setFormData({...formData, travelMode: "Air"})} className={`flex-1 py-2 rounded-lg font-bold text-xs uppercase ${formData.travelMode === "Air" ? "bg-white text-blue-900 shadow-sm" : "text-slate-500"}`}>✈️ Air</button>
               </div>
 
-              {/* Group Size */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Adults</label>
@@ -79,7 +80,6 @@ export default function BookingForm({ tourId, tourTitle }: { tourId: number, tou
                 </div>
               </div>
 
-              {/* Price Display */}
               <div className="bg-blue-900 p-5 rounded-2xl text-center">
                 <p className="text-blue-300 text-[10px] font-black uppercase tracking-widest">Estimated Price</p>
                 <p className="text-3xl font-black text-white">PKR {estimate.toLocaleString()}</p>
